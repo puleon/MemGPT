@@ -1,0 +1,5 @@
+datasets==1.7.0
+transformers==4.7.0.dev
+torch==1.8.1
+torchvision==0.9.1
+tqdm==4.49.0
