@@ -32,9 +32,8 @@ class MemGPT2LMHeadModel(GPT2LMHeadModel):
         """
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 
-        labels = labels[:, ::2]
-        assert torch.any(labels != mem_token).item(), "Mem tokens in labels are not aligned properly."
-        assert torch.any(input_ids[:, ::2] != mem_token).item(), "Mem tokens in inputs are not aligned properly."
+        labels[:, 1::2] = -100
+        assert torch.any(labels != mem_token).item(), "Mem tokens are not aligned properly."
 
         transformer_outputs = self.transformer(
             input_ids,
@@ -52,7 +51,6 @@ class MemGPT2LMHeadModel(GPT2LMHeadModel):
             return_dict=return_dict,
         )
         hidden_states = transformer_outputs[0]
-        hidden_states = hidden_states[:, ::2, :]
 
         # Set device for model parallelism
         if self.model_parallel:
@@ -69,7 +67,7 @@ class MemGPT2LMHeadModel(GPT2LMHeadModel):
             # Flatten the tokens
             loss_fct = CrossEntropyLoss()
             loss = loss_fct(shift_logits.view(-1, shift_logits.size(-1)), shift_labels.view(-1))
-
+            
         if not return_dict:
             output = (lm_logits,) + transformer_outputs[1:]
             return ((loss,) + output) if loss is not None else output
