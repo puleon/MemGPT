@@ -26,8 +26,8 @@ def main():
     texts = [el['sentence'] for el in dataset['test']]
     encodings = tokenizer('\n\n'.join(texts), return_tensors='pt')
 
-    max_length = model.config.n_positions
-    stride = 1024
+    max_length = 512
+    stride = 512
 
     lls = []
     for i in tqdm(range(0, encodings.input_ids.size(1), stride)):
