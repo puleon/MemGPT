@@ -18,8 +18,9 @@ Fine-tuning the library models for causal language modeling (GPT, GPT-2, CTRL, .
 
 Here is the full list of checkpoints on the hub that can be fine-tuned by this script:
 https://huggingface.co/models?filter=causal-lm
+
+DeepPavlov team changed the script to run with the modified version of GPT-2 model with memory tokens.
 """
-# You can also adapt this script on your own causal language modeling task. Pointers for this are left as comments.
 
 import logging
 import math
